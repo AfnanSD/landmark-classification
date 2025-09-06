@@ -1,95 +1,104 @@
-## Project Overview
+# Landmark Classification with CNNs
 
-Welcome to the Convolutional Neural Networks (CNN) project!
-In this project, you will learn how to build a pipeline to process real-world, user-supplied images and to put your model into an app.
-Given an image, your app will predict the most likely locations where the image was taken.
+## 📌 Overview
 
-By completing this lab, you demonstrate your understanding of the challenges involved in piecing together a series of models designed to perform various tasks in a data processing pipeline. 
+This project is part of the **Udacity Deep Learning Nano Degree** program.
+The goal is to build a **landmark image classifier** that predicts the most likely location of a photo by recognizing distinctive landmarks, even when GPS metadata is unavailable.
 
-Each model has its strengths and weaknesses, and engineering a real-world application often involves solving many problems without a perfect answer.
+The project demonstrates the **end-to-end deep learning workflow**:
 
-### Why We're Here
+* Preprocessing real-world image data
+* Building and training Convolutional Neural Networks (CNNs) from scratch
+* Applying transfer learning with pretrained models
+* Comparing model performance
+* Deploying the best-performing model in an interactive app that accepts user-uploaded images
 
-Photo sharing and photo storage services like to have location data for each photo that is uploaded. With the location data, these services can build advanced features, such as automatic suggestion of relevant tags or automatic photo organization, which help provide a compelling user experience. Although a photo's location can often be obtained by looking at the photo's metadata, many photos uploaded to these services will not have location metadata available. This can happen when, for example, the camera capturing the picture does not have GPS or if a photo's metadata is scrubbed due to privacy concerns.
+---
 
-If no location metadata for an image is available, one way to infer the location is to detect and classify a discernable landmark in the image. Given the large number of landmarks across the world and the immense volume of images that are uploaded to photo sharing services, using human judgement to classify these landmarks would not be feasible.
+## 🛠️ Tech Stack
 
-In this project, you will take the first steps towards addressing this problem by building a CNN-powered app to automatically predict the location of the image based on any landmarks depicted in the image. At the end of this project, your app will accept any user-supplied image as input and suggest the top k most relevant landmarks from 50 possible landmarks from across the world.
+* Python 3.7+
+* PyTorch – deep learning framework
+* Torchvision – pretrained models & data transforms
+* NumPy, Pandas, Matplotlib – data wrangling & visualization
+* Jupyter Notebook – interactive development
+
+---
+
+## 📊 Dataset
+
+* Subset of the **Google Landmarks Dataset v2**
+* Includes **50 landmark categories** from across the world
+* Dataset provided by Udacity (not included in this repo due to size)
+* [Dataset info](https://github.com/cvdfoundation/google-landmark)
+
+---
+
+## 🚀 Project Workflow
+
+1. **Data Preprocessing**
+
+   * Image resizing, normalization, and augmentation
+   * Splitting into train/validation/test sets
+
+2. **Model Development**
+
+   * CNN from scratch
+   * Transfer learning with pretrained architectures (ResNet)
+   * Hyperparameter tuning (learning rate, batch size, optimizer, etc.)
+
+3. **Evaluation & Comparison**
+
+   * Loss Function: Cross Entropy Loss
+   * Validation Metric: Top-1 Accuracy
+   * Training vs. validation loss curves for each experiement
+
+4. **Deployment**
+
+   * Notebook app that takes an input image
+   * Returns **top-5 predicted landmarks** with probabilities
+
+---
+
+## 📈 Results
 
 
-## Project Instructions
+* **From Scratch CNN**: Established baseline accuracy
+* **Transfer Learning (ResNet)**: Achieved significantly higher accuracy and generalization
+* Final app successfully predicts top-5 landmarks for unseen images
 
-### Getting started
+<img width="2214" height="866" alt="لقطة الشاشة 2025-09-03 222046" src="https://github.com/user-attachments/assets/2cd0ef20-03fb-49c5-8e78-07680cf6a15c" />
 
-You have two choices for completing this project. You can work locally on your machine (NVIDIA GPU highly recommended), or you can work in the provided Udacity workspace that you can find in your classroom.
+---
 
-#### Setting up in the Udacity Project Workspace
-You can find the Udacity Project Workspace in your Udacity classroom, in the Project section.
+## 📂 Repository Structure
 
-1. Start the workspace by clicking on `Project Workspace` in the left menu in the page
-2. When prompted on whether you want a GPU or not, please ANSWER YES (the GPU is going to make everything several times faster)
+```
+.
+├── README.md
+├── requirements.txt
+├── app.ipynb                     # Notebook app: load image → predict top-5 landmarks
+├── cnn_from_scratch.ipynb        # Baseline CNN built/trained from scratch
+├── transfer_learning.ipynb       # Experiments with pretrained backbone (ResNet)
+├── workspace_utils.py            # Utility helpers
+├── mean_and_std.pt               # Cached dataset normalization stats (tensor file)
+├── proof.png                     # Sample output / evidence image for README
+├── static_images/                # Images used in README/docs (figures, screenshots)
+├── src/
+│   ├── __init__.py
+│   ├── data.py                   # Datasets, transforms, loaders, augmentation code
+│   ├── helpers.py                # Generic utilities 
+│   ├── model.py                  # CNN definitions (scratch architectures)
+│   ├── optimization.py           # Optimizers, schedulers, training hyperparams
+│   ├── predictor.py              # Inference utilities (top-5 predictions, label mapping)
+│   ├── train.py                  # Training loop(s): fit/validate, checkpoints, logging
+│   └── transfer.py               # Transfer-learning model / head replacements
 
-The environment is already setup for you, including the starter code, so you can jump right into building the project!
+```
 
-#### Setting up locally
+---
 
-This setup requires a bit of familiarity with creating a working deep learning environment. While things should work out of the box, in case of problems you might have to do operations on your system (like installing new NVIDIA drivers) that are not covered in the class. Please do this if you are at least a bit familiar with these subjects, otherwise please consider using the provided Udacity workspace that you find in the classroom.
+## 🎓 Acknowledgements
 
-1. Open a terminal and clone the repository, then navigate to the downloaded folder:
-	
-	```	
-		git clone https://github.com/udacity/cd1821-CNN-project-starter.git
-		cd cd1821-CNN-project-starter
-	```
-    
-2. Create a new conda environment with python 3.7.6:
-
-    ```
-        conda create --name udacity_cnn_project -y python=3.7.6
-        conda activate udacity_cnn_project
-    ```
-    
-    NOTE: you will have to execute `conda activate udacity_cnn_project` for every new terminal session.
-    
-3. Install the requirements of the project:
-
-    ```
-        pip install -r requirements.txt
-    ```
-
-4. Install and open Jupyter lab:
-	
-	```
-        pip install jupyterlab
-		jupyter lab
-	```
-
-### Developing your project
-
-Now that you have a working environment, execute the following steps:
-
->**Note:** Complete the following notebooks in order, do not move to the next step if you didn't complete the previous one.
-
-1. Open the `cnn_from_scratch.ipynb` notebook and follow the instructions there
-2. Open `transfer_learning.ipynb` and follow the instructions
-3. Open `app.ipynb` and follow the instructions there
-
-## Evaluation
-
-Your project will be reviewed by a Udacity reviewer against the CNN project rubric.  Review this rubric thoroughly and self-evaluate your project before submission.  All criteria found in the rubric must meet specifications for you to pass.
-
-## Project Submission
-
-Your submission should consist of the github link to your repository.  Your repository should contain:
-- The `landmark.ipynb` file with fully functional code, all code cells executed and displaying output, and all questions answered.
-- An HTML or PDF export of the project notebook with the name `report.html` or `report.pdf`.
-
-Please do __NOT__ include any of the project data sets provided in the `landmark_images/` folder.
-
-### Ready to submit your project?
-
-Click on the "Submit Project" button in the classroom and follow the instructions to submit!
-
-## Dataset Info
-
-The landmark images are a subset of the Google Landmarks Dataset v2.
+* Project completed as part of the **Udacity Deep Learning Nano Degree**
+* Dataset: [Google Landmarks Dataset v2](https://github.com/cvdfoundation/google-landmark)
